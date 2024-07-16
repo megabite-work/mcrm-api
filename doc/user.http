@@ -1,0 +1,44 @@
+GET http://localhost:888/api/users HTTP/1.1
+
+###
+
+GET http://localhost:888/api/users/2 HTTP/1.1
+
+###
+
+POST http://localhost:888/api/users HTTP/1.1
+content-type: application/json
+
+{
+    "username": "user",
+    "email": "user@gmail.com",
+    "password": "secret",
+    "phone": "901234567"
+}
+
+###
+
+PUT http://localhost:888/api/users/2 HTTP/1.1
+content-type: application/json
+
+{
+    "username": "user-put",
+    "password": "secret-put"
+}
+
+###
+
+PATCH http://localhost:888/api/users/2 HTTP/1.1
+content-type: application/json
+
+{
+    "email": "a_put@a.a",
+    "phone": "+998901234567"
+}
+
+###
+
+DELETE  http://localhost:888/api/users/2 HTTP/1.1
+
+###
+
