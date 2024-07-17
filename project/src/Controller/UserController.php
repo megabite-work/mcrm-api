@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,6 +19,7 @@ class UserController extends AbstractController
         private UserRepository $userRepo,
         private EntityManagerInterface $em,
         private UserPasswordHasherInterface $hasherPassword,
+        private AuthenticationSuccessHandler $successHandler
     ) {
     }
 
@@ -62,7 +64,10 @@ class UserController extends AbstractController
         $this->em->persist($user);
         $this->em->flush();
 
-        return $this->json(['user' => $user], context: ['groups' => ['user:read']]);
+        $auth = $this->successHandler->handleAuthenticationSuccess($user);
+        $auth = json_decode($auth->getContent(), true);
+
+        return $this->json(['user' => $user, 'auth' => $auth], context: ['groups' => ['user:read']]);
     }
 
     #[Route('/{id}', name: 'app_users_update', methods: ['PUT', 'PATCH'])]
