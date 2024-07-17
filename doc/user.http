@@ -1,13 +1,8 @@
-GET http://localhost:888/api/users HTTP/1.1
+@baseUrl = http://localhost:888/api
 
-###
-
-GET http://localhost:888/api/users/2 HTTP/1.1
-
-###
-
-POST http://localhost:888/api/users HTTP/1.1
-content-type: application/json
+# @name create_user
+POST {{baseUrl}}/users HTTP/1.1
+Content-Type: application/json
 
 {
     "username": "user",
@@ -18,18 +13,44 @@ content-type: application/json
 
 ###
 
-PUT http://localhost:888/api/users/2 HTTP/1.1
+
+# @name login
+POST {{baseUrl}}/auth/login HTTP/1.1
 content-type: application/json
 
 {
-    "username": "user-put",
+    "username": "user",
+    "password": "secret"
+}
+
+###
+@token = {{ login.response.body.token }}
+
+GET {{baseUrl}}/users HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+GET {{baseUrl}}/users/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+PUT {{baseUrl}}/users/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
     "password": "secret-put"
 }
 
 ###
 
-PATCH http://localhost:888/api/users/2 HTTP/1.1
-content-type: application/json
+PATCH {{baseUrl}}/users/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "email": "a_put@a.a",
@@ -38,7 +59,7 @@ content-type: application/json
 
 ###
 
-DELETE  http://localhost:888/api/users/2 HTTP/1.1
-
+DELETE  {{baseUrl}}/users/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
 ###
-
